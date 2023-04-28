@@ -9,7 +9,6 @@ import gdown
 from keras.models import load_model
 import cv2
 
-import wget
 url = 'https://drive.google.com/uc?id=1FagNcjLQoV7ROcl-ycadNqMtJeIZQakS&export=download'
 output = 'model17.h5'
 gdown.download(url, output, quiet=False)
