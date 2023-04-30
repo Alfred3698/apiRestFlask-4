@@ -6,7 +6,6 @@ from zipfile import ZipFile
 
 # Definimos la URL del archivo a descargar
 
-remote_url = 'https://drive.google.com/uc?id=1FagNcjLQoV7ROcl-ycadNqMtJeIZQakS&export=download/model17.h5'
 path_model = "model"
 name_model = "model17_folder"
 url = 'https://drive.google.com/uc?id=1CYPcEwEFGaT3vV9HQJNmgducWRYM5uJW&export=download'
@@ -17,4 +16,4 @@ with ZipFile(output, 'r') as zip:
     print('File is unzipped in temp folder')
 with ZipFile(path_model+"/"+name_model+".zip", 'r') as zip:
     zip.extractall(name_model)
-    print('File is unzipped in temp folder')
+    print('File is unzipped in temp folder :D')
