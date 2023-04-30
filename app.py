@@ -8,17 +8,31 @@ import numpy as np
 import gdown
 from keras.models import load_model
 import cv2
-
-url = 'https://drive.google.com/uc?id=1FagNcjLQoV7ROcl-ycadNqMtJeIZQakS&export=download'
-output = 'model17.h5'
+from zipfile import ZipFile
+# load model
+path_model = "model"
+name_model = "model17_folder"
+url = 'https://drive.google.com/uc?id=1CYPcEwEFGaT3vV9HQJNmgducWRYM5uJW&export=download'
+output = 'servicio_classify17.zip'
 gdown.download(url, output, quiet=False)
+with ZipFile(output, 'r') as zip:
+    zip.extractall(path_model)
+    print('File is unzipped in temp folder')
+with ZipFile(path_model+"/"+name_model+".zip", 'r') as zip:
+    zip.extractall(name_model)
+    print('File is unzipped in temp folder')
+
+##
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-modelo = tf.keras.models.load_model(
-    ('model17.h5'),
-    custom_objects={'KerasLayer': hub.KerasLayer}
-)
+# modelo = tf.keras.models.load_model(
+#     ('model17.h5'),
+#     custom_objects={'KerasLayer': hub.KerasLayer}
+# )
+# tf.keras.models.load_model("model17.h5")
+modelo = tf.keras.models.load_model(name_model+"/model17", compile=False)
+# modelo = tf.keras.models.load_model("model17.h5", compile=False)
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -63,12 +77,22 @@ def upload_file():
 
 
 def categorizar(path):
-    img = load_img(path)
-    img = np.array(img).astype(float)/255
-    img = cv2.resize(img, (224, 224))
-    prediccion = modelo.predict(img.reshape(-1, 224, 224, 3))
-    print("prediccion", prediccion[0])
-    return np.argmax(prediccion[0], axis=-1)
+    # img = load_img(path)
+    # img = np.array(img).astype(float)/255
+    # img = cv2.resize(img, (224, 224))
+    # prediccion = modelo.predict(img.reshape(-1, 224, 224, 3))
+    # print("prediccion", prediccion[0])
+
+    img = load_img(path, target_size=(256, 256, 3))
+
+    # Convierte la imagen a un array de numpy y normaliza los valores
+    x = img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+
+    # Realiza la clasificación de la imagen con el modelo
+    preds = modelo.predict(x)
+    # return np.argmax(prediccion[0], axis=-1)
+    return np.argmax(preds, -1)
 
 
 def prediccion_(clase):
