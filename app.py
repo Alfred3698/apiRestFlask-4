@@ -9,30 +9,19 @@ import gdown
 from keras.models import load_model
 import cv2
 from zipfile import ZipFile
-# load model
-path_model = "model"
-name_model = "model17_folder"
-url = 'https://drive.google.com/uc?id=1CYPcEwEFGaT3vV9HQJNmgducWRYM5uJW&export=download'
-output = 'servicio_classify17.zip'
-gdown.download(url, output, quiet=False)
-with ZipFile(output, 'r') as zip:
-    zip.extractall(path_model)
-    print('File is unzipped in temp folder')
-with ZipFile(path_model+"/"+name_model+".zip", 'r') as zip:
-    zip.extractall(name_model)
-    print('File is unzipped in temp folder')
 
-##
+
+longitud, altura = 200, 100
+
+modelo = tf.keras.models.load_model(
+    ('clasificador_marcas.h5'),
+    custom_objects={'KerasLayer': hub.KerasLayer}
+)
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-# modelo = tf.keras.models.load_model(
-#     ('model17.h5'),
-#     custom_objects={'KerasLayer': hub.KerasLayer}
-# )
-# tf.keras.models.load_model("model17.h5")
-modelo = tf.keras.models.load_model(name_model+"/model17", compile=False)
-# modelo = tf.keras.models.load_model("model17.h5", compile=False)
+
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -73,63 +62,84 @@ def upload_file():
             print("iniciando prediccion")
             prediccion = categorizar(UPLOAD_FOLDER+'/'+filename)
             os.remove(UPLOAD_FOLDER+'/'+filename)
-            return prediccion_(prediccion)
+            return prediccion_v2(prediccion)
 
 
 def categorizar(path):
-    # img = load_img(path)
-    # img = np.array(img).astype(float)/255
-    # img = cv2.resize(img, (224, 224))
-    # prediccion = modelo.predict(img.reshape(-1, 224, 224, 3))
-    # print("prediccion", prediccion[0])
-
-    img = load_img(path, target_size=(256, 256, 3))
-
-    # Convierte la imagen a un array de numpy y normaliza los valores
-    x = img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-
-    # Realiza la clasificación de la imagen con el modelo
-    preds = modelo.predict(x)
-    # return np.argmax(prediccion[0], axis=-1)
-    return np.argmax(preds, -1)
+    img = load_img(path)
+    img = np.array(img).astype(float)/255
+    img = cv2.resize(img, (224, 224))
+    prediccion = modelo.predict(img.reshape(-1, 224, 224, 3))
+    return np.argmax(prediccion[0], axis=-1)
 
 
-def prediccion_(clase):
+def prediccion_v2(clase):
     if clase == 0:
         response = '7up'
     elif clase == 1:
-        response = 'Ciel'
+        response = 'agua_bonafont'
     elif clase == 2:
-        response = 'epura'
+        response = 'agua_ciel'
     elif clase == 3:
-        response = 'fiel'
+        response = 'agua_epura'
     elif clase == 4:
-        response = 'peñafiel'
+        response = 'agua_fiel'
     elif clase == 5:
-        response = 'skarch'
-    if clase == 6:
-        response = 'boing'
-    elif clase == 7:
-        response = 'casera'
+        response = 'agua_penafiel'
+    elif clase == 6:
+        response = 'agua_skarch'
+    if clase == 7:
+        response = 'belight'
     elif clase == 8:
-        response = 'cocacola'
+        response = 'boing'
     elif clase == 9:
-        response = 'delaware'
-    if clase == 10:
-        response = 'delvalle'
-    elif clase == 11:
-        response = 'jumex'
+        response = 'casera'
+    elif clase == 10:
+        response = 'cocacola'
+    if clase == 11:
+        response = 'delawarepunch'
     elif clase == 12:
-        response = 'redcola'
+        response = 'electrolit'
     elif clase == 13:
-        response = 'sidral'
+        response = 'fanta'
     elif clase == 14:
-        response = 'suerox'
+        response = 'fresca'
     elif clase == 15:
+        response = 'fritos'
+    elif clase == 16:
+        response = 'fuzetea'
+    elif clase == 17:
+        response = 'jugo_delvallefrut'
+    elif clase == 18:
+        response = 'jumex'
+    elif clase == 19:
+        response = 'manzanitasol'
+    elif clase == 20:
+        response = 'mirinda'
+    elif clase == 21:
+        response = 'pepsi'
+    elif clase == 22:
+        response = 'powerade'
+    elif clase == 23:
+        response = 'redcola'
+    elif clase == 24:
+        response = 'rufles'
+    elif clase == 25:
+        response = 'sidralmundet'
+    elif clase == 26:
+        response = 'sprite'
+    elif clase == 27:
+        response = 'squirt'
+    elif clase == 28:
+        response = 'suerox'
+    elif clase == 29:
         response = 'topochico'
-    if clase == 16:
-        response = 'Vive100'
+    elif clase == 30:
+        response = 'vive100'
+    elif clase == 31:
+        response = 'yoglala'
+    elif clase == 32:
+        response = 'yogyoplait'
     return response
 
 
