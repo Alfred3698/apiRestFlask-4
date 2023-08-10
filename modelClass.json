@@ -1,0 +1,70 @@
+[
+    {
+        "model": "modelpt1",
+        "class": {
+            "7up":0,
+            "bonafont":1,
+            "ciel": 2,
+            "epura": 3,
+            "fiel": 4
+        }
+    },
+    {
+        "model": "modelpt2",
+        "class": {
+            "agua_penafiel":0,
+            "agua_skarch":1,
+            "belight": 2,
+            "boing": 3,
+            "casera": 4
+        }
+    },
+    {
+        "model": "modelpt3",
+        "class": {
+            "cocacola":0,
+            "delawarepunch":1,
+            "electrolit": 2,
+            "fanta": 3,
+            "fresca": 4
+        }
+    },
+    {
+        "model": "modelpt4",
+        "class": {
+            "fritos":0,
+            "fuzetea":1,
+            "jugo_delvallefrut": 2,
+            "jumex": 3,
+            "manzanitasol": 4
+        }
+    },
+    {
+        "model": "modelpt5",
+        "class": {
+            "mirinda":0,
+            "pepsi":1,
+            "powerade": 2,
+            "redcola": 3,
+            "rufles": 4
+        }
+    },
+    {
+        "model": "modelpt6",
+        "class": {
+            "sidralmundet":0,
+            "sprite":1,
+            "squirt": 2,
+            "suerox": 3,
+            "topochico": 4
+        }
+    },
+    {
+        "model": "modelpt7",
+        "class": {
+            "vive100":0,
+            "yoglala":1,
+            "yogyoplait": 2
+        }
+    }
+]
